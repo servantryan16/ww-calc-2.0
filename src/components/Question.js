@@ -17,7 +17,7 @@ class Question extends Component {
 
 	render() {
 		if (this.props.inputType==='' || typeof this.props.inputType === 'undefined'){
-			console.error('Must pass an inputType to Question component!');
+			console.error('Must pass an inputType to Question component!'); // maybe a confirm box that asks "Do you exspect to make no [insert type of income] income?"
 		}
 
 		if(this.props.inputType==='select-box' && this.props.options === ''){
@@ -48,7 +48,7 @@ class Question extends Component {
 					}
 					{this.props.inputType==='range' &&
 						<div className="slidecontainer">
-							<input onChange={this.props.handleRange} type="range" min="1" max="100" value={this.props.vars[this.props.index] ? this.props.vars[this.props.index] : 50} className="slider" id="myRange"></input>
+							<input onChange={this.props.handleRange} type="range" min="0" max="100" value={this.props.vars[this.props.index] ? this.props.vars[this.props.index] : 50} className="slider" id="myRange"></input>
 							<span className="range">{this.props.range}%</span>
 						</div>
 					}
