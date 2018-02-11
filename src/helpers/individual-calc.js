@@ -1,4 +1,4 @@
-export const individualCalc = (a,b,c,d,e,f)=>{
+export const individualCalc = (a,b,c,d,e,f,g)=>{
 	const
 		prem = 134,
 		fpl1808 = 4320,
@@ -18,11 +18,12 @@ export const individualCalc = (a,b,c,d,e,f)=>{
 		capitalGainsContribution = 0,
 		// householdPremium = 0,
 		adjustedGrossIncome = parseInt(a,10),
-		spouseAGI = b,
-		capitalGains = c,
-		currentPremium = d,
-		sizeOfHousehold = e;
-		// numberOfAdults = parseInt(f, 10);
+		spouseAGI = parseInt(b,10),
+		capitalGains = parseInt(c,10),
+		currentPremium = parseInt(d,10),
+		sizeOfHousehold = parseInt(e, 10),
+		numberOfAdults = parseInt(f, 10),
+		filingStatus = parseInt(g, 10);
 
 	function calc200fpl(size) {
 		if (size > 8) {
@@ -36,9 +37,10 @@ export const individualCalc = (a,b,c,d,e,f)=>{
 
 	const fpl200 = calc200fpl(sizeOfHousehold);
 	if(fpl200 < (adjustedGrossIncome+spouseAGI)){
-		premium = ((prem)*12);
+		if(status == 'joint'){
+			premium = ((prem*numberOfAdults)*12);
+		} else {premium = ((prem)*12);}
 		console.log('multiplying premium by 12');
-		// householdPremium = ((prem*numberOfAdults)*12);
 	}
 	console.log(premium);
 	if(adjustedGrossIncome < 15000){
@@ -49,14 +51,14 @@ export const individualCalc = (a,b,c,d,e,f)=>{
 
 	if(capitalGains < 15000){
 		capitalGainsContribution = 0;
-	}else if(parseInt(capitalGains,10) >= 15000 && parseInt(capitalGains,10) < 60000){
-		const ltcg = (15000 - (parseInt(capitalGains,10)*0.25));
-		capitalGainsContribution = ((parseInt(capitalGains,10)-parseInt(ltcg,10))*0.085);
-	}else if(parseInt(capitalGains,10) >= 60000){
-		capitalGainsContribution = (parseInt(capitalGains,10)*0.085);
+	}else if(capitalGains >= 15000 && capitalGains < 60000){
+		const ltcg = (15000 - (capitalGains*0.25));
+		capitalGainsContribution = ((capitalGains - ltcg)*0.085);
+	}else if(capitalGains >= 60000){
+		capitalGainsContribution = (capitalGains*0.085);
 	}
 
-	const totalPersonalContribution = (parseInt(income,10) + parseInt(capitalGainsContribution,10) + parseInt(premium, 10));
-	const savings = parseInt(currentPremium*12,10) - totalPersonalContribution;
-	return { fpl200, income, savings, capitalGainsContribution, premium, totalPersonalContribution, currentPremium };
+	const totalPersonalContribution = (income + capitalGainsContribution + premium);
+	const savings = currentPremium*12 - totalPersonalContribution;
+	return { fpl200, income, savings, capitalGainsContribution, premium, totalPersonalContribution, currentPremium, filingStatus, numberOfAdults };
 };
